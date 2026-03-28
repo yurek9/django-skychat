@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-6 border
+ border-gray-200 dark:border-gray-800">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
+        <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+        Kto jest online
+    </h2>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+    Użytkownicy online: <span id="users-count">0</span>
+    </p>
+
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        Lista użytkowników, którzy są aktualnie aktywni w systemie.
+    </p>
+
+    <ul id="online-users" class="space-y-2">
+        <li class="text-gray-500 dark:text-gray-400">Ładowanie...</li>
+    </ul>
+
+</div>
+{% endblock %}

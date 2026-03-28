@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto h-[85vh] flex flex-col bg-white-300 dark:bg-gray-900 shadow-2xl rounded-2xl
+overflow-hidden my-4 border border-gray-100 dark:border-gray-800 transition-colors duration-200">
+
+  <!-- HEADER -->
+  <header class="px-6 py-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800
+                flex justify-between items-center gap-3">
+    <div class="relative">
+      <div class="w-10 h-10 rounded-full bg-linear-to-tr from-blue-600 to-indigo-400
+                  flex items-center justify-center text-white font-bold shadow-md">
+        JD
+      </div>
+      <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
+    </div>
+
+    <div>
+      <h2 class="text-sm font-bold text-gray-800 dark:text-gray-100">Główny kanał</h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Aktywnych: <span id="users-count">{{ users_count|default:"0" }}</span>
+      </p>
+    </div>
+
+    {% if user.is_staff %}
+        <button
+            hx-post="{% url 'chat:clear_chat' %}"
+            hx-confirm="Czy na pewno chcesz usunąć historię?"
+            hx-target="#chat-messages"
+            class="flex items-center gap-2 px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 dark:text-red-400
+                   dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded-lg transition-all">
+            Wyczyść czat
+        </button>
+    {% endif %}
+  </header>
+
+  <!-- CHAT MESSAGES (jedyna sekcja HTMX) -->
+  <section
+    id="chat-messages"
+    hx-get="{% url 'chat:get_messages' %}"
+    hx-trigger="load, every 5s"
+    hx-swap="innerHTML"
+    class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/50 dark:bg-gray-950/50 scroll-smooth min-h-0
+    scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+    {% if messages %}
+      {% for message in messages %}
+        {% include 'chat/single_message.html' %}
+
+      {% endfor %}
+    {% else %}
+      {% include 'chat/skeleton.html' %}
+    {% endif %}
+
+  </section>
+
+
+  <!-- TYPING INDICATOR -->
+  <div id="typing-indicator" class="typing px-6 py-1 text-sm text-gray-500 dark:text-gray-400 items-center gap-2 hidden bg-white
+         dark:bg-gray-900">
+    <span id="typing-username"></span> pisze…
+    <div class="typing-dots"><span></span><span></span><span></span></div>
+  </div>
+
+  <!-- INPUT FORM -->
+  <div class="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 p-4">
+    <form
+      id="chat-form"
+      hx-post="{% url 'chat:send_message' %}"
+      hx-target="#chat-messages"
+      hx-swap="beforeend"
+      hx-on:htmx:after-request="if(event.detail.successful){ this.reset();resetChatInput(); updateCharCount(this.querySelector('textarea')); }"
+      class="flex items-end gap-3"
+    >
+      {% csrf_token %}
+
+      <div class="relative flex-1">
+        <textarea
+          name="content"
+          id="chat-input"
+          maxlength="500"
+
+          oninput="autoResize(this); updateCharCount(this);"
+          placeholder="Napisz wiadomość..."
+          class="w-full bg-gray-100 dark:bg-gray-800 rounded-2xl px-5 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white
+                 dark:focus:bg-gray-700 outline-none transition-all ring-1 ring-black/5 dark:ring-white/10
+                  text-gray-800 dark:text-gray-200 resize-none overflow-hidden min-h-12"></textarea>
+
+        <div class="absolute right-4 bottom-3 text-[10px] font-medium text-gray-400 dark:text-gray-500">
+          <span id="char-count">0</span>/500
+        </div>
+      </div>
+
+      <button
+              id="send-button"
+              type="submit"
+              disabled
+              class="w-11 h-11 rounded-2xl bg-blue-600 text-white
+                    hover:bg-blue-700 transition-all active:scale-95
+                    shadow-lg shadow-blue-200 dark:shadow-none
+                    flex items-center justify-center
+                    disabled:opacity-50 disabled:cursor-not-allowed">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+          d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+        </svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
+
+Jak to działa toast razem
+Użytkownik wysyła wiadomość → HTMX robi POST
+
+Django zwraca HTML nowej wiadomości
+
+HTMX wstrzykuje ją do listy
+
+JS wyświetla toast „Wiadomość wysłana!”
+
+Jeśli błąd (np. pusta wiadomość) → toast „Message cannot be empty”
+
+hx-target="#chat-messages" — dodaje nową wiadomość na końcu listy
+
+hx-swap="beforeend" — dopisuje, nie nadpisuje
+
+this.reset() — czyści input po wysłaniu
+
+HTMX wysyła POST do send_message
+
+Django zwraca HTML nowej wiadomości
+
+JS dodaje ją do listy i wyświetla toast (success lub error)
+
+Zero przeładowań strony, wszystko dzieje się dynamicznie dzięki HTMX i JS

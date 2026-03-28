@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+       strona chat.js i toast
+{% endblock %}
+<script>
+---------------------------------------------------------------------------
+ // --- CSRF HANDLING ---
+
+function getCSRFToken() {
+  return (
+    document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrftoken="))
+      ?.split("=")[1] || ""
+  );
+}
+
+// ------------------------------
+// 🔄 Okresowe sprawdzanie połączenia
+// ------------------------------
+
+function checkConnection() {
+  fetch("/", { method: "HEAD" })
+    .then(() => hideConnectionError())
+    .catch(() => showConnectionError());
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // sprawdzaj polaczenie co 25 sekund
+  connectionCheckInterval = setInterval(checkConnection, 25000);
+});
+
+console.log("chat.js załadowany poprawnie");
+
+</scriot>
+
+------------------------toast bez reloadu------------------------
+
+@login_required
+def send_message(request):
+    # Obsługuje tylko POST, zwraca 405 dla innych metod
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+    # Pobiera treść wiadomości, sprawdza czy nie jest pusta, tworzy nową wiadomość i renderuje ją
+    content = request.POST.get("content", "").strip()
+    if not content:
+        return HttpResponse(status=400, content="Message cannot be empty")
+    # Tworzymy wiadomość z przypisanym użytkownikiem i treścią,
+    new_message = Message.objects.create(user=request.user, content=content)
+    # renderujemy tylko nową wiadomość, a nie całą listę wiadomości -
+    # to jest kluczowe dla działania AJAX-a
+    # dzięki czemu AJAX będzie mógł dodać tę wiadomość do istniejącej listy
+    #  bez przeładowania całej strony
+    return render(request, "chat/single_message.html", {"message": new_message})
+
+
+    @login_required
+def send_message(request):
+    if request.method == "POST":
+        msg = Message.objects.create(user=request.user, content=request.POST["content"])
+
+        # render pojedynczej wiadomości
+        message_html = render_to_string("chat/single_message.html", {"message": msg})
+
+        # zwracamy HTML wiadomości + event toastowy
+        return HttpResponse(
+            message_html + '<div hx-trigger="show-toast" hx-swap-oob="true"></div>'
+        )
+
+
+        <div id="toast"
+            class="hidden fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg transition-opacity duration-300">
+          Wiadomość wysłana!
+        </div>
+
+
+<script>
+document.body.addEventListener("show-toast", () => {
+    const t = document.getElementById("toast");
+    t.classList.remove("hidden");
+    t.style.opacity = "1";
+
+    setTimeout(() => {
+        t.style.opacity = "0";
+        setTimeout(() => t.classList.add("hidden"), 300);
+    }, 3000);
+});
+</script>

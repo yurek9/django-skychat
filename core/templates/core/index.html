@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="relative isolate overflow-hidden bg-white dark:bg-gray-900">
+    <!--  TŁO -->
+    <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+        <div class="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 translate-x-1/2 rotate-30 bg-linear-to-tr from-sky-400 to-blue-600 opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75">
+        </div>
+
+        <div class="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-sky-400 to-blue-600 opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75">
+        </div>
+    </div>
+
+    <div class="mx-auto max-w-7xl px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40">
+        <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:shrink-0 lg:pt-8">
+            <div class="mt-24 sm:mt-32 lg:mt-16">
+                <span class="rounded-full bg-sky-600/10 px-3 py-1 text-sm font-semibold leading-6 text-sky-600 ring-1 ring-inset ring-sky-600/10">
+                    Wersja v1.0 już dostępna
+                </span>
+            </div>
+
+            <h1 class="mt-10 text-4xl font-bold tracking-tight text-gray-700 sm:text-6xl dark:text-gray-200">
+                Rozmawiaj w czasie rzeczywistym ze <span class="text-sky-600">SkyChat</span>
+            </h1>
+
+            <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
+                Doświadcz błyskawicznej komunikacji dzięki technologii HTMX i Tailwind CSS 4. Czysty, szybki i bezpieczny czat dla Ciebie i Twoich znajomych.
+            </p>
+
+            <div class="mt-10 flex items-center gap-x-6">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'chat:chat_room' %}" class="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 transition-all">
+                        Wejdź do czatu
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="rounded-md bg-sky-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 transition-all">
+                        Zaloguj się
+                    </a>
+                    <a href="{% url 'signup' %}" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-300 transition-all">
+                        Stwórz konto <span aria-hidden="true">→</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
+
+            <div class="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
+                <div class="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+                    <div class="w-[24rem] h-64 rounded-md bg-gray-50 dark:bg-gray-800 shadow-3xl ring-1 ring-gray-900/10
+                    flex items-center justify-center border border-gray-200 dark:border-gray-600">
+
+                      <div>
+                            <h2 class=" text-sm font-bold text-gray-800 dark:text-gray-400">Główny kanał</h2>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                Aktywnych: <span id="users-count">{{ users_count|default:"0" }}</span>
+                            </p>
+                       </div>
+                         <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-20 text-sky-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2.5 21.5l4.5-.838A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.474 0-2.85-.387-4.04-1.06l-2.435.454.454-2.435A7.938 7.938 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/>
+                         </svg>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</di>
+<script>window.USER_IS_LOGGED_IN = {{ user.is_authenticated|yesno:"true,false" }};</script>
+
+{% endblock %}

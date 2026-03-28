@@ -1,0 +1,52 @@
+/* ----------------------------- */
+/* Tailwind 4 – import + źródła */
+/* ----------------------------- */
+
+@import "tailwindcss";
+
+/* Gdzie Tailwind ma szukać klas */
+@source "../templates/**/*.html";
+@source "../chat/templates/**/*.html";
+@source "../chat/**/*.py";
+
+
+@theme {
+  /* To wymusza na Tailwindzie szukanie klasy .dark na elemencie nadrzędnym */
+  --dark-mode: selector;
+}
+/* ----------------------------- */
+/* Wariant DARK MODE (klasa .dark) */
+/* ----------------------------- */
+
+@variant dark (&:where(.dark &));
+
+
+/* ----------------------------- */
+/* Twoje komponenty */
+/* ----------------------------- */
+
+@layer components {
+  .bubble-in {
+    @apply bg-white text-gray-800 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700;
+  }
+
+  .bubble-out {
+    @apply bg-blue-600 text-white rounded-2xl rounded-tr-none shadow-md dark:bg-blue-500;
+  }
+}
+
+/* ----------------------------- */
+/* HTMX indicator */
+/* ----------------------------- */
+
+.htmx-indicator {
+  display: none;
+}
+
+.htmx-request .htmx-indicator {
+  display: inline;
+}
+
+.htmx-request #trash-icon {
+  display: none;
+}

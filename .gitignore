@@ -1,0 +1,29 @@
+# Django
+db.sqlite3
+__pycache__/
+*.py[cod]
+*$py.class
+local_settings.py
+.env
+
+# Statystyki i logi
+*.log
+.DS_Store
+
+# Tailwind CSS i Node
+node_modules/
+.npm
+package-lock.json
+
+# Pliki generowane (opcjonalnie)
+# Jeśli chcesz, by serwer sam generował CSS, możesz odkomentować poniższą linię:
+ static/dist/output.css
+
+# Środowisko wirtualne
+venv/
+env/
+.venv/
+
+# VS Code i IDE
+.vscode/
+.idea/

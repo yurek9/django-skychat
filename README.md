@@ -1,47 +1,52 @@
 # 🚀 Django SkyChat (Tailwind 4 + HTMX)
 
-Nowoczesna aplikacja czatu zbudowana w Django, wykorzystująca najnowsze technologie frontendowe dla zapewnienia płynności bez przeładowania strony.
+A modern chat application built with Django, leveraging cutting-edge frontend technologies for seamless real-time interaction without page reloads.
 
-## ✨ Funkcje
-- **Real-time feel**: Wysyłanie wiadomości bez odświeżania strony (HTMX).
-- **Modern UI**: Stylizacja przy użyciu Tailwind CSS 4.
-- **Admin Tools**: Możliwość czyszczenia historii czatu (tylko dla personelu).
-- **UX Essentials**: Licznik znaków w czasie rzeczywistym, wskaźniki ładowania (spinners) oraz obsługa błędów sieci.
-- **Auth**: Pełny system rejestracji i logowania.
+## ✨ Features
+- **Real-time feel**: Send messages without page refresh (HTMX).
+- **Modern UI**: Styled with Tailwind CSS 4.
+- **Admin Tools**: Ability to clear chat history (staff only).
+- **UX Essentials**: Real-time character counter, loading spinners, and error handling.
+- **Auth**: Full registration and login system.
 
-## 🛠️ Instalacja i uruchomienie
+## 🛠️ Installation and Setup
 
-### 1. Klonowanie i środowisko
+### 1. Cloning and Environment
 ```bash
-# Stwórz środowisko wirtualne
+# Create virtual environment
 python -m venv venv
-# Aktywuj (Windows)
+# Activate (Windows)
 venv\Scripts\activate
-# Zainstaluj zależności
+# Install dependencies
 pip install django django-environ django-whitenoise
+```
 
-*** 2. Konfiguracja zmiennych
-Skopiuj plik .env.example do .env i uzupełnij klucze:
+### 2. Environment Variables
+Copy the .env.example file to .env and fill in the keys:
 
----Bash
+```bash
 cp .env.example .env
+```
 
-*** 3. Baza danych i Tailwind
----Bash
+### 3. Database and Tailwind
+```bash
 python manage.py makemigrations
 python manage.py migrate
-# Uruchom kompilator Tailwind (w osobnym terminalu)
+# Run Tailwind compiler (in a separate terminal)
 npm run dev
-*** 4. Start serwera
----Bash
-python manage.py runserver
+```
 
-*** 📦 Struktura technologiczna
+### 4. Start Server
+```bash
+python manage.py runserver
+```
+
+## 📦 Technology Stack
 Backend: Django 6.x
 
 Frontend: Tailwind CSS 4 (Beta/Stable), HTMX
 
-Ikony: Heroicons
+Icons: Heroicons
 
 
 
